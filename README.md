@@ -14,6 +14,7 @@ A personal vocabulary tracker built for Persian speakers learning German. You ca
 
 - [Bun](https://bun.sh) ≥ 1.0
 - A [Supabase project](https://app.supabase.com) (free tier is fine)
+- [Docker](https://www.docker.com) + Docker Compose (only if you want to run via containers)
 
 ## Setup
 
@@ -98,3 +99,29 @@ Query params for the list endpoint: `search`, `level` (A1–C2), `page`, `limit`
 - Paginated word list with inline edit and delete
 - Dashboard with total count and a breakdown per level
 - Each user only ever sees their own words (RLS enforced at the database level)
+
+## Docker
+
+If you'd rather not run Bun locally, you can spin up both services with Docker Compose.
+
+Make sure `backend/.env` is filled in first (same as the manual setup above), then run:
+
+```bash
+VITE_SUPABASE_URL=https://<your-project-ref>.supabase.co \
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_... \
+VITE_API_URL=http://localhost:3001/api \
+docker compose up --build
+```
+
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:5173 |
+| Backend | http://localhost:3001 |
+
+The frontend is built at image-build time, so the `VITE_*` variables need to be passed as shown above — they get baked into the static bundle by Vite. The backend reads its secrets from `backend/.env` at runtime via `env_file`.
+
+To stop everything:
+
+```bash
+docker compose down
+```
