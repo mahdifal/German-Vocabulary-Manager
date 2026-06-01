@@ -47,7 +47,7 @@ async function resolveUserId(): Promise<string> {
   const { data, error } = await admin.auth.admin.listUsers();
   if (error) throw new Error(`Failed to list users: ${error.message}`);
   if (data.users.length === 0) throw new Error('No users found. Sign up first.');
-  const user = data.users[0];
+  const user = data.users[0]!;
   console.log(`ℹ️  No --email/--user-id given. Using first user: ${user.email}`);
   return user.id;
 }
